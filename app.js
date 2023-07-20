@@ -18,16 +18,21 @@ const user = 'OMG';
 const password = 'carlos123';
 const dbname = 'inventario';
 
-const uri = `mongodb+srv://${user}:${password}@cluster0.ccfjitf.mongodb.net/${dbname}?retryWrites=true&w=majority`;
-console.log("uri", uri);
+
+
+const connect = async function () {
+    const uri = `mongodb+srv://${user}:${password}@cluster0.ccfjitf.mongodb.net/${dbname}?retryWrites=true&w=majority`;// Will return DB URI 
+    console.log(`Connecting to DB - uri: ${uri}`);
+    return mongoose.connect(uri, {useNewUrlParser: true});
+  };
 // Me conecto a MongoDB
-mongoose.connect(uri,
-    {
-        useNewUrlParser: true, useUnifiedTopology: true
+(async () => {
+    try {
+     const connected = await connect();
+    } catch(e) {
+     console.log('Error happend while connecting to the DB: ', e.message)
     }
-)
-    .then(() => console.log("Base de datos conectada"))
-    .catch(e => console.log(e))
+  })();
 
 
 // Motor de plantillas, definición de rutas
@@ -53,4 +58,5 @@ const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
 
